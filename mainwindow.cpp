@@ -6,6 +6,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->plot->addGraph();
+    ui->plot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+    ui->plot->graph(0)->setLineStyle(QCPGraph::lsNone);
+
 }
 
 MainWindow::~MainWindow()
@@ -13,12 +17,34 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::addPoint(double x, double y)
+{
+    qv_x.append(x);
+    qv_y.append(y);
+
+}
+
+void MainWindow::clearData()
+{
+    qv_x.clear();
+    qv_y.clear();
+}
+
+void MainWindow::plot()
+{
+    ui->plot->graph(0)->setData(qv_x, qv_y);
+    ui->plot->replot();
+    ui->plot->update();
+}
+
 void MainWindow::on_btn_add_clicked()
 {
-
+    addPoint(ui->bx_x->value(), ui->bx_y->value());
+    plot();
 }
 
 void MainWindow::on_btn_clear_clicked()
 {
-
+    clearData();
+    plot();
 }
